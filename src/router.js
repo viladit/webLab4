@@ -27,6 +27,12 @@ export default new VueRouter({
             path: '/app',
             name: 'app-page',
             component: Main,
+            beforeEnter: (to, from, next) => {
+                if (localStorage.getItem("jwt")) next();
+                else next({
+                    name: 'error-page-app',
+                });
+            }
 
         },
         {
