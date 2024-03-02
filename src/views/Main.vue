@@ -162,7 +162,7 @@ export default {
   methods: {
     // Взаимодействие с формой и графиком
     addDots(x, y){
-      this.$axios.put("http://localhost:8890/api/point",
+      this.$axios.put("http://localhost:8890/api/points",
           {x: x, y: y, r: this.r},
           {headers: {"Authorization": "Bearer " + localStorage.getItem("jwt")}
       }).then(() => {
@@ -178,7 +178,7 @@ export default {
       });
     },
     deleteDots(){
-      this.$axios.delete("http://localhost:8890/api/point",
+      this.$axios.delete("http://localhost:8890/api/points",
           {headers: {Authorization: "Bearer " + localStorage.getItem("jwt")}
       }).then(() => {
         this.loadDots();
@@ -204,7 +204,7 @@ export default {
 
     // Загрузка и прорисовка точек на графике
     loadDots(){
-      this.$axios.get("http://localhost:8890/api/point", {
+      this.$axios.get("http://localhost:8890/api/points", {
         headers: {Authorization: "Bearer " + localStorage.getItem("jwt")}
       }).then(response => {
         this.dots = response.data;
