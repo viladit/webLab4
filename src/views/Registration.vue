@@ -45,7 +45,7 @@ export default {
     logIn(e){
       e.preventDefault()
       this.$router.push({name: 'app-page'});
-      this.$axios.post('http://localhost:8890/api/user', {
+      this.$axios.post('http://localhost:8890/auth', {
         login: this.login,
         password: this.password
       }).then(response => {
@@ -57,7 +57,7 @@ export default {
     },
     register(e){
       e.preventDefault();
-      this.$axios.put('http://localhost:8890/api/user', {
+      this.$axios.put('http://localhost:8890/registration', {
         login: this.login,
         password: this.password
       }).then(() => {
