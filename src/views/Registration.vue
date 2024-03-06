@@ -3,13 +3,13 @@
     <h1>Вход в систему</h1>
     <hr>
     <form id="form" @sumbit.prevent="logIn">
-      <div id="login">
-        <label for="loginInput">Введите логин:</label>
+      <div id="username">
+        <label for="usernameInput">Введите логин:</label>
         <input type="text"
-               id="loginInput"
+               id="usernameInput"
                required
                placeholder="Логин"
-               v-model.trim="login"/>
+               v-model.trim="username"/>
       </div>
       <div id="password">
         <label for="passwordInput">Введите пароль:</label>
@@ -37,28 +37,38 @@ export default {
   },
   data(){
     return{
-      login: "",
+      username: "",
       password: ""
     }
   },
   methods: {
-    logIn(e){
-      e.preventDefault()
-      this.$router.push({name: 'app-page'});
-      this.$axios.post('http://localhost:8890/auth', {
-        login: this.login,
+    logIn(e) {
+      e.preventDefault();
+
+      async function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
+
+      this.$axios.post('http://localhost:8080/api/auth', {
+        username: this.username,
         password: this.password
-      }).then(response => {
-        localStorage.setItem("jwt", response.data);
-        this.$router.push({name: 'app-page'});
+      }).then(async response => {
+        // Сохраняем токен в localStorage
+        localStorage.setItem("jwt", response.data.token);
+
+        // Ждем 2 секунды перед перенаправлением на главную страницу
+        await sleep(1000);
+
+        // Перенаправляем на главную страницу
+        this.$router.push({ name: 'app-page' });
       }).catch(error => {
         this.AxiosErrorHandler(error.response.data);
       });
     },
     register(e){
       e.preventDefault();
-      this.$axios.put('http://localhost:8890/registration', {
-        login: this.login,
+      this.$axios.post('http://localhost:8080/api/registration', {
+        username: this.username,
         password: this.password
       }).then(() => {
         this.$notify({
@@ -87,7 +97,7 @@ export default {
 #form button {
   margin: 20px 10px 10px 10px;
 }
-#login, #password {
+#username, #password {
   margin: 5px;
 }
 

@@ -102,8 +102,9 @@
             <th scope="col">X</th>
             <th scope="col">Y</th>
             <th scope="col">R</th>
-            <th scope="col">Текущее время</th>
             <th scope="col">Результат попадания</th>
+            <th scope="col">Текущее время</th>
+            <th scope="col">Время выполнения</th>
           </tr>
           </thead>
           <tbody>
@@ -111,8 +112,12 @@
             <td>{{ dot.x }}</td>
             <td>{{ dot.y }}</td>
             <td>{{ dot.r }}</td>
-            <td>{{ dot.time }}</td>
-            <td>{{ dot.result ? "\u2713" : "\u2717" }}</td>
+            <td>
+              <span v-if="dot.result === 'false'">&#x2717;</span>
+              <span v-else>&#x2713;</span>
+            </td>
+            <td>{{ dot.currentTime }}</td>
+            <td>{{ dot.executionTime }}</td>
           </tr>
           </tbody>
         </table>
@@ -136,7 +141,7 @@ export default {
       r: "3", // максимальный размер графика
       xGraph: "", // Х из графика
       yGraph: "", // Y из графика
-      dots: new Array(0), // Список всех точек пользователя
+      dots: new Array(0), // Список всех точек
     }
   },
   watch: {
@@ -162,7 +167,7 @@ export default {
   methods: {
     // Взаимодействие с формой и графиком
     addDots(x, y){
-      this.$axios.put("http://localhost:8890/api/points",
+      this.$axios.post("http://localhost:8080/api/points",
           {x: x, y: y, r: this.r},
           {headers: {"Authorization": "Bearer " + localStorage.getItem("jwt")}
       }).then(() => {
@@ -178,7 +183,7 @@ export default {
       });
     },
     deleteDots(){
-      this.$axios.delete("http://localhost:8890/api/points",
+      this.$axios.delete("http://localhost:8080/api/points",
           {headers: {Authorization: "Bearer " + localStorage.getItem("jwt")}
       }).then(() => {
         this.loadDots();
@@ -189,7 +194,7 @@ export default {
           type: 'success'
         });
       }).catch(() => {
-        this.AxiosErrorHandler("Точки не удалось удалить");
+        this.AxiosErrorHandler("Не удалось удалить точки");
       });
     },
     logout(){
@@ -204,7 +209,7 @@ export default {
 
     // Загрузка и прорисовка точек на графике
     loadDots(){
-      this.$axios.get("http://localhost:8890/api/points", {
+      this.$axios.get("http://localhost:8080/api/points", {
         headers: {Authorization: "Bearer " + localStorage.getItem("jwt")}
       }).then(response => {
         this.dots = response.data;
@@ -232,8 +237,14 @@ export default {
             newDot.setAttribute("cy", `${150 - (-1.8 * dot.y) / 5 * 100}`);
           }
           if (dot.r == r) {
-            newDot.setAttribute("fill", dot.result === true ? "green" : "red");
-            newDot.setAttribute("r", "4.5");
+            if (dot.result == 'true') {
+              newDot.setAttribute("fill", "green");
+              newDot.setAttribute("r", "4.5");
+            }
+            else {
+              newDot.setAttribute("fill", "red");
+              newDot.setAttribute("r", "4.5");
+            }
           } else {
             newDot.setAttribute("fill", "black");
             newDot.setAttribute("opacity", `${((r - 0.5 < dot.r) && (r + 0.5 > dot.r)) ? "0.5" : "0.1"}`);
@@ -314,6 +325,7 @@ export default {
   display: table;
   text-align: center;
   box-shadow: 0 0 10px 1px black;
+  border-radius: 25px;
 }
 
 /*

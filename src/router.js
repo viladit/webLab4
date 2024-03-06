@@ -33,7 +33,6 @@ export default new VueRouter({
                     name: 'error-page-app',
                 });
             }
-
         },
         {
             path: '/*',
