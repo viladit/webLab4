@@ -230,11 +230,11 @@ export default {
           newDot.setAttribute("id", "target-dot");
           newDot.setAttribute("r", "3.5");
           if (r >= 0) {
-            newDot.setAttribute("cx", `${dot.x / 5 * 100 + 150}`);
-            newDot.setAttribute("cy", `${150 - dot.y / 5 * 100}`);
+            newDot.setAttribute("cx", `${dot.x * 33.33 + 150.1}`);
+            newDot.setAttribute("cy", `${dot.y * (-33.33) + 150.1}`);
           } else {
-            newDot.setAttribute("cx", `${(-1.8 * dot.x) / 5 * 100 + 150}`);
-            newDot.setAttribute("cy", `${150 - (-1.8 * dot.y) / 5 * 100}`);
+            newDot.setAttribute("cx", `${dot.x * (-33.33) + 150.1}`);
+            newDot.setAttribute("cy", `${dot.y * (33.33) + 150.1}`);
           }
           if (dot.r == r) {
             if (dot.result == 'true') {
