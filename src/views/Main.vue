@@ -152,7 +152,7 @@ export default {
       this.validateInput(-5, 3, 'input-y', val);
     },
     r(val){
-      if(this.validateInput(-5, 3, 'input-r', val)) {
+      if(this.validateInput(0, 3, 'input-r', val)) {
         let r = parseFloat(this.r);
         let circle = document.getElementById("circle");
         let rectangle = document.getElementById("rectangle");
@@ -258,22 +258,22 @@ export default {
     validateForm(){
       if ((this.x >= -5 && this.x <= 3) &&
           (this.y >= -5 && this.y <= 3) &&
-          (this.r >= -5 && this.r <= 3) &&
+          (this.r >= 0 && this.r <= 3) &&
           (!isNaN(this.x) && !isNaN(this.y) && !isNaN(this.r)) &&
           (this.x.trim() !== '' && this.y.trim() !== '' && this.r.trim() !== '')){
         this.addDots(this.x, this.y);
       } else {
-        this.AxiosErrorHandler("Проверте введенные данные");
+        this.AxiosErrorHandler("Проверьте введенные данные");
       }
     },
     validateFromGraph(){
       let position = getMousePosition(document.getElementById("graph"), event);
-      this.xGraph = ((position.x - 150) / 100 * this.r).toFixed(2);
-      this.yGraph = ((150 - position.y) / 100 * this.r).toFixed(2);
-      if (this.r >= -5 && this.r <= 3) {
+      this.xGraph = ((position.x - 150) / 100 * 3).toFixed(2);
+      this.yGraph = ((150 - position.y) / 100 * 3).toFixed(2);
+      if (this.r >= 0 && this.r <= 3) {
         this.addDots(this.xGraph, this.yGraph);
       } else {
-        this.AxiosErrorHandler("Проверте значение R");
+        this.AxiosErrorHandler("Проверьте значение R");
       }
       function getMousePosition(element, event) {
         let rect = element.getBoundingClientRect();
