@@ -49,7 +49,7 @@ export default {
         return new Promise(resolve => setTimeout(resolve, ms));
       }
 
-      this.$axios.post('http://localhost:8080/api/auth', {
+      this.$axios.post('http://localhost:24620/api/auth', {
         username: this.username,
         password: this.password
       }).then(async response => {
@@ -67,7 +67,7 @@ export default {
     },
     register(e){
       e.preventDefault();
-      this.$axios.post('http://localhost:8080/api/registration', {
+      this.$axios.post('http://localhost:24620/api/registration', {
         username: this.username,
         password: this.password
       }).then(() => {
